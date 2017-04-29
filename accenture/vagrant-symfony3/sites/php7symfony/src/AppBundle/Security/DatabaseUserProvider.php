@@ -31,11 +31,12 @@ class DatabaseUserProvider implements UserProviderInterface
         return $user;
     }
 
-    public function refreshUser(UserInterface $user) {
+    public function refreshUser(UserInterface $user): \Symfony\Component\Security\Core\User\UserInterface
+    {
         return $user;
     }
 
-    public function supportsClass($class)
+    public function supportsClass($class): bool
     {
         return $class === 'AppBundle\Entity\User';
     }

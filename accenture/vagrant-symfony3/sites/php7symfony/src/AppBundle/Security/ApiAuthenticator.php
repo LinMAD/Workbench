@@ -31,7 +31,7 @@ class ApiAuthenticator implements GuardAuthenticatorInterface
         $this->encoder = $encoder;
     }
 
-    public function start(Request $request, AuthenticationException $authException = NULL)
+    public function start(Request $request, AuthenticationException $authException = NULL): \Symfony\Component\HttpFoundation\Response
     {
         return new Response('Auth header required', 401);
     }
@@ -64,10 +64,10 @@ class ApiAuthenticator implements GuardAuthenticatorInterface
             return null;
         }
 
-        return $userProvider->loadUserByUsername($data['username']);;
+        return $userProvider->loadUserByUsername($data['username']);
     }
 
-    public function checkCredentials($credentials, UserInterface $user)
+    public function checkCredentials($credentials, UserInterface $user): bool
     {
         return true;
     }
