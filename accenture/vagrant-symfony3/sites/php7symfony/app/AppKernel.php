@@ -1,6 +1,7 @@
 <?php
 
 use FOS\RestBundle\FOSRestBundle;
+use FOS\UserBundle\FOSUserBundle;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
@@ -17,6 +18,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new FOSRestBundle(),
+            new FOSUserBundle(),
             new AppBundle\AppBundle(),
         ];
 
