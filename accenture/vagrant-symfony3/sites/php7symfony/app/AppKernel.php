@@ -2,6 +2,7 @@
 
 use FOS\RestBundle\FOSRestBundle;
 use FOS\UserBundle\FOSUserBundle;
+use Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
@@ -19,6 +20,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new FOSRestBundle(),
             new FOSUserBundle(),
+            new LexikJWTAuthenticationBundle(),
             new AppBundle\AppBundle(),
         ];
 
