@@ -7,3 +7,9 @@ movies:
   type:     annotation
   defaults: { "_format" : "json" }
   prefix: /api
+
+serials:
+  resource: AppBundle\Controller\Api\SerialController
+  type:     annotation
+  defaults: { "_format" : "json" }
+  prefix: /api
