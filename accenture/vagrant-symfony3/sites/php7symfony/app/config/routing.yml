@@ -1,0 +1,36 @@
+app:
+    resource: '@AppBundle/Controller/'
+    type: annotation
+
+movies:
+  resource: AppBundle\Controller\Api\MovieController
+  type:     annotation
+  defaults: { "_format" : "json" }
+  prefix: /api
+
+security:
+  resource: AppBundle\Controller\Api\SecurityController
+  type: rest
+  defaults: { "_format" : "json" }
+  prefix: /api
+
+serials:
+  resource: AppBundle\Controller\Api\SerialController
+  type:     annotation
+  defaults: { "_format" : "json" }
+  prefix: /api
+
+fos_user_security_login:
+    path:     /admin/login/
+    defaults:
+        _controller: FOSUserBundle:Security:login
+
+fos_user_security_check:
+    path:     /admin/login/check/
+    defaults:
+        _controller: FOSUserBundle:Security:check
+
+fos_user_security_logout:
+    path:     /admin/logout/
+    defaults:
+        _controller: FOSUserBundle:Security:logout

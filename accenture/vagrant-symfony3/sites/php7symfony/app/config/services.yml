@@ -1,0 +1,10 @@
+services:
+    app.user_provider:
+        class: AppBundle\Security\DatabaseUserProvider
+        arguments: ["@doctrine.orm.default_entity_manager"]
+
+    app.api_authenticator:
+        class: AppBundle\Security\ApiAuthenticator
+        arguments:
+          - '@doctrine.orm.default_entity_manager'
+          - '@lexik_jwt_authentication.encoder'
