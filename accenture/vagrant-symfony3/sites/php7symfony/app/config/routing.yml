@@ -1,3 +1,9 @@
 app:
     resource: '@AppBundle/Controller/'
     type: annotation
+
+movies:
+  resource: AppBundle\Controller\Api\MovieController
+  type:     annotation
+  defaults: { "_format" : "json" }
+  prefix: /api

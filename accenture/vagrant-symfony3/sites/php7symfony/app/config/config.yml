@@ -33,6 +33,8 @@ framework:
     assets: ~
     php_errors:
         log: true
+    csrf_protection: false
+    serializer: { enabled: true }
 
 # Twig Configuration
 twig:
@@ -68,3 +70,19 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+fos_rest:
+    allowed_methods_listener: true # Show in header allowed methods
+    view:
+        formats:
+            html: false
+            json: true
+            xml: true
+            rss: false
+        templating_formats:
+            html: false
+        force_redirects:
+            html: false
+        failed_validation: HTTP_BAD_REQUEST
+        empty_content: HTTP_NO_CONTENT
+        default_engine: twig

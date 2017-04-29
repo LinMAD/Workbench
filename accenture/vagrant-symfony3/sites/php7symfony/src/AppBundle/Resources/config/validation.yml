@@ -1,0 +1,4 @@
+AppBundle\Entity\Movie:
+    properties:
+        name:
+            - NotBlank: ~
