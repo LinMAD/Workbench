@@ -1,24 +1,36 @@
-# To get started with security, check out the documentation:
-# http://symfony.com/doc/current/security.html
 security:
+    encoders:
+        AppBundle\Entity\User:
+            algorithm: bcrypt
+            cost: 13
 
-    # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+    role_hierarchy:
+        ROLE_INTERNET:              ROLE_INTERNET
+        ROLE_ADMIN:                 ROLE_ADMIN
+
     providers:
-        in_memory:
-            memory: ~
+        fos_userbundle:
+            id: fos_user.user_provider.username_email
 
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
+        admin:
+            provider: fos_userbundle
+            pattern: ^/admin
+            anonymous: true
+            logout:
+                path:   fos_user_security_logout
+                target: /admin/
+            form_login:
+                login_path: fos_user_security_login
+                check_path: fos_user_security_check
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
         main:
             anonymous: ~
-            # activate different ways to authenticate
 
-            # http://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
-
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
-            #form_login: ~
+    access_control:
+        - { path: ^/admin/login/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/login/check/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, roles: [ ROLE_ADMIN ] }
