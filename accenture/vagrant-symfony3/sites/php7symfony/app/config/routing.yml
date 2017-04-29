@@ -8,6 +8,12 @@ movies:
   defaults: { "_format" : "json" }
   prefix: /api
 
+security:
+  resource: AppBundle\Controller\Api\SecurityController
+  type: rest
+  defaults: { "_format" : "json" }
+  prefix: /api
+
 serials:
   resource: AppBundle\Controller\Api\SerialController
   type:     annotation
