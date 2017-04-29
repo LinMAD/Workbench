@@ -11,6 +11,8 @@ security:
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username_email
+        db_provider:
+            id: app.user_provider
 
     firewalls:
         admin:
@@ -26,7 +28,13 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
+        api:
+            stateless: true
+            pattern: ^/api/(?!token)
+            provider: db_provider
+            guard:
+                authenticators:
+                    - app.api_authenticator
         main:
             anonymous: ~
 
@@ -34,3 +42,5 @@ security:
         - { path: ^/admin/login/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login/check/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, roles: [ ROLE_ADMIN ] }
+        - { path: ^/api/token, roles: [IS_AUTHENTICATED_ANONYMOUSLY] }
+        - { path: ^/api/, roles: [ ROLE_USER, ROLE_ADMIN ] }
