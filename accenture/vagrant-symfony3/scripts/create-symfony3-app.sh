@@ -11,13 +11,13 @@ fi
 cd /vagrant/scripts
 
 # change user of nginx and php-fpm
-sudo ./change-user.sh
+./change-user.sh
 
 ## create database
-sudo ./create-mysql.sh $PROJECT_NAME
+./create-mysql.sh $PROJECT_NAME
 
 ## config new project on nginx
-sudo ./create-sites-symfony.sh $PROJECT_NAME
+./create-sites-symfony.sh $PROJECT_NAME
 
 ## download symfony standard project
 sudo curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony
