@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <form action="{{ path('fos_user_security_check') }}" method="post" style="text-align: center">
+        <div>
+        <span>
+            <b>Login:</b>
+        </span>
+        <br />
+            <input type="text" id="username" name="_username" value="" required="required"><br />
+        </div>
+        <div>
+            <span for="password">
+                <b>Password:</b>
+            </span><br />
+            <input type="password" id="password" name="_password" required="required"><br />
+        </div>
+        <br />
+        <input type="submit" id="_submit" name="_submit" value="Submit">
+    </form>
+
+{% endblock %}
