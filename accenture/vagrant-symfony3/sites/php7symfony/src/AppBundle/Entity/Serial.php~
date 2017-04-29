@@ -161,28 +161,5 @@ class Serial
     {
         return $this->rating;
     }
-
-    /**
-     * Set seasons
-     *
-     * @param integer $seasons
-     *
-     * @return Serial
-     */
-    public function setSeasons($seasons)
-    {
-        $this->seasons = $seasons;
-
-        return $this;
-    }
-
-    /**
-     * Get seasons
-     *
-     * @return integer
-     */
-    public function getSeasons()
-    {
-        return $this->seasons;
-    }
 }
+

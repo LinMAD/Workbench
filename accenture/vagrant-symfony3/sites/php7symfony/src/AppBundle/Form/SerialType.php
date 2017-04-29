@@ -13,7 +13,7 @@ class SerialType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name')->add('description')->add('genre')->add('rating');
+        $builder->add('name')->add('description')->add('genre')->add('rating')->add('seasons');
     }
     
     /**
