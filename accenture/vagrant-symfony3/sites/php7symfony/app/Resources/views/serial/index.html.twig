@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Serials list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Genre</th>
+                <th>Rating</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for serial in serials %}
+            <tr>
+                <td><a href="{{ path('admin_serials_show', { 'id': serial.id }) }}">{{ serial.id }}</a></td>
+                <td>{{ serial.name }}</td>
+                <td>{{ serial.description }}</td>
+                <td>{{ serial.genre }}</td>
+                <td>{{ serial.rating }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_serials_show', { 'id': serial.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_serials_edit', { 'id': serial.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_serials_new') }}">Create a new serial</a>
+        </li>
+    </ul>
+{% endblock %}

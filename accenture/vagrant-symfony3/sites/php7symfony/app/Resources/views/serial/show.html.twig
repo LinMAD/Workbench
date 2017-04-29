@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Serial</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ serial.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ serial.name }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ serial.description }}</td>
+            </tr>
+            <tr>
+                <th>Genre</th>
+                <td>{{ serial.genre }}</td>
+            </tr>
+            <tr>
+                <th>Rating</th>
+                <td>{{ serial.rating }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_serials_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_serials_edit', { 'id': serial.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
