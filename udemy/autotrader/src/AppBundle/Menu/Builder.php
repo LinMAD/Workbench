@@ -15,14 +15,18 @@ class Builder
      * @param array       $options
      *
      * @return MenuItem
+     *
+     * @throws \InvalidArgumentException
      */
     public function mainMenu(MenuFactory $menuFactory, array $options): MenuItem
     {
-        $menu = $menuFactory->createItem('root');
+        $menu = $menuFactory->createItem('root')->setChildrenAttribute('class', 'navbar-nav mr-auto');
 
-        $menu->setChildrenAttribute('class', 'navbar-nav mr-auto')
-            ->addChild('Home', ['route' => 'homepage'])
-            ->setAttribute('class', 'nav-item');
+        $menu->addChild('Home', ['route' => 'homepage'])
+             ->setAttribute('class', 'nav-link');
+
+        $menu->addChild('Offer', ['route' => 'offer'])
+             ->setAttribute('class', 'nav-link');
 
         return $menu;
     }
