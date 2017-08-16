@@ -1,5 +1,24 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}
+    {{ parent() }}
+The best cars in the internet!
+{% endblock %}
+
 {% block body %}
     <h1>Our Offer</h1>
+    <table class="table">
+        <tr>
+            <th>Make</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+        {% for car in cars %}
+            <tr>
+                <td>{{ car.make }}</td>
+                <td>{{ car.name }}</td>
+                <td><a href="{{ url('show_car', {id: car.id}) }}">Show details</a></td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
