@@ -110,4 +110,14 @@ class Make
     {
         return $this->cars;
     }
+
+    /**
+     * Transform Make name to string
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }
