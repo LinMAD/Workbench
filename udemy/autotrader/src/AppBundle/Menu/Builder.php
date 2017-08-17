@@ -20,7 +20,7 @@ class Builder
      */
     public function mainMenu(MenuFactory $menuFactory, array $options): MenuItem
     {
-        $menu = $menuFactory->createItem('root')->setChildrenAttribute('class', 'navbar-nav mr-auto');
+        $menu = $menuFactory->createItem('root')->setChildrenAttribute('class', 'nav navbar-nav');
 
         $menu->addChild('Home', ['route' => 'homepage'])
              ->setAttribute('class', 'nav-link');
