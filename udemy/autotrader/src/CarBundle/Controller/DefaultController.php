@@ -5,20 +5,21 @@ namespace CarBundle\Controller;
 use CarBundle\Entity\Car;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
     /**
      * @Route("/our-cars", name="offer")
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      *
      * @throws \LogicException
      */
     public function indexAction()
     {
         $carRepository = $this->getDoctrine()->getRepository(Car::class);
-        $cars = $carRepository->findAll();
+        $cars = $carRepository->findCarsWithDetails();
 
         return $this->render('CarBundle:Default:index.html.twig', [
             'cars' => $cars,
@@ -30,12 +31,15 @@ class DefaultController extends Controller
      *
      * @param $id
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \LogicException
      */
-    public function showAction($id): \Symfony\Component\HttpFoundation\Response
+    public function showAction($id): Response
     {
         $carRepository = $this->getDoctrine()->getRepository(Car::class);
-        $car = $carRepository->find($id);
+        $car = $carRepository->findCarWithDetailsById($id);
 
         return $this->render('CarBundle:Default:show.html.twig', [
             'car' => $car,
