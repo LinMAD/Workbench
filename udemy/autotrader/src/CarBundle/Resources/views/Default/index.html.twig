@@ -7,6 +7,12 @@ The best cars in the internet!
 
 {% block body %}
     <h1>Our Offer</h1>
+    <div class="row justify-content-end" style="margin-bottom: 1%">
+        {{ form_start(form, { attr: { class: 'form-inline' }}) }}
+            {{ form_widget(form.search, { attr: { placeholder: 'Search' }}) }}
+            <button type="submit" class="btn">Search</button>
+        {{ form_end(form) }}
+    </div>
     <table class="table">
         <tr>
             <th>Make</th>
