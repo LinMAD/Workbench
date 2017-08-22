@@ -20,15 +20,23 @@
                 <td><a href="{{ path('car_show', { 'id': car.id }) }}">{{ car.id }}</a></td>
                 <td>{{ car.price }}</td>
                 <td>{{ car.year }}</td>
-                <td>{% if car.navigation %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <span class="glyphicon glyphicon-{% if car.navigation %}ok-circle {% else %}ban-circle{% endif %}"></span>
+                </td>
                 <td>{{ car.description }}</td>
+                <td>
+                    <span class="glyphicon glyphicon-{% if car.promote %}ok-circle {% else %}ban-circle{% endif %}"></span>
+                </td>
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('car_show', { 'id': car.id }) }}">show</a>
+                            <a href="{{ path('car_show', { 'id': car.id }) }}">Show</a>
                         </li>
                         <li>
-                            <a href="{{ path('car_edit', { 'id': car.id }) }}">edit</a>
+                            <a href="{{ path('car_edit', { 'id': car.id }) }}">Edit</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('car_promote', { 'id': car.id}) }}">Promote</a>
                         </li>
                     </ul>
                 </td>

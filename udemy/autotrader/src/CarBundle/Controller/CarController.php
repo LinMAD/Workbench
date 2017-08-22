@@ -172,4 +172,30 @@ class CarController extends Controller
             ->setMethod(Request::METHOD_DELETE)
             ->getForm();
     }
+
+    /**
+     * Promote car by id
+     *
+     * @param int $id
+     *
+     * @Route("/promote/{id}", name="car_promote")
+     *
+     * @return RedirectResponse
+     *
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
+    public function promoteAction(int $id): RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $car = $em->getRepository(Car::class)->find($id);
+
+        if (true === $this->get('car.data_checker')->checkCar($car)) {
+            $this->addFlash('success', 'Car promoted');
+        } else {
+            $this->addFlash('warning', 'Car not applicable');
+        }
+
+        return $this->redirectToRoute('car_index');
+    }
 }
