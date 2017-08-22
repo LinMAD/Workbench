@@ -67,7 +67,7 @@ class Car
      *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -121,14 +121,6 @@ class Car
     }
 
     /**
-     * @return bool
-     */
-    public function isNavigation(): ?bool
-    {
-        return $this->navigation;
-    }
-
-    /**
      * @param bool $navigation
      */
     public function setNavigation(bool $navigation)
@@ -141,7 +133,7 @@ class Car
      *
      * @return boolean
      */
-    public function getNavigation()
+    public function getNavigation(): ?bool
     {
         return $this->navigation;
     }
@@ -153,7 +145,7 @@ class Car
      *
      * @return Car
      */
-    public function setModel(Model $model = null)
+    public function setModel(Model $model = null): Car
     {
         $this->model = $model;
 
@@ -165,7 +157,7 @@ class Car
      *
      * @return Model
      */
-    public function getModel()
+    public function getModel(): ?Model
     {
         return $this->model;
     }
@@ -177,7 +169,7 @@ class Car
      *
      * @return Car
      */
-    public function setMake(Make $make = null)
+    public function setMake(Make $make = null): Car
     {
         $this->make = $make;
 
@@ -189,7 +181,7 @@ class Car
      *
      * @return Make
      */
-    public function getMake()
+    public function getMake(): ?Make
     {
         return $this->make;
     }

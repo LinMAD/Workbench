@@ -23,10 +23,13 @@ class Builder
         $menu = $menuFactory->createItem('root')->setChildrenAttribute('class', 'nav navbar-nav');
 
         $menu->addChild('Home', ['route' => 'homepage'])
-             ->setAttribute('class', 'nav-link');
+            ->setAttribute('class', 'nav-link');
 
         $menu->addChild('Offer', ['route' => 'offer'])
-             ->setAttribute('class', 'nav-link');
+            ->setAttribute('class', 'nav-link');
+
+        $menu->addChild('Manage cars', ['route' => 'car_index'])
+            ->setAttribute('class', 'nav-link');
 
         return $menu;
     }

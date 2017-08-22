@@ -24,6 +24,7 @@ class CarController extends Controller
      *
      * @Route("/", name="car_index")
      * @Method("GET")
+     *
      * @Template(template="@Car/car/index.html.twig")
      *
      * @throws \InvalidArgumentException
@@ -33,7 +34,7 @@ class CarController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $cars = $em->getRepository('CarBundle:Car')->findAll();
+        $cars = $em->getRepository(Car::class)->findAll();
 
         return [
             'cars' => $cars,
@@ -45,6 +46,7 @@ class CarController extends Controller
      *
      * @Route("/new", name="car_new")
      * @Method({"GET", "POST"})
+     *
      * @Template(template="@Car/car/new.html.twig")
      *
      * @param Request $request
@@ -78,6 +80,7 @@ class CarController extends Controller
      *
      * @Route("/{id}", name="car_show")
      * @Method("GET")
+     *
      * @Template(template="@Car/car/show.html.twig")
      *
      * @param Car $car
@@ -99,6 +102,7 @@ class CarController extends Controller
      *
      * @Route("/{id}/edit", name="car_edit")
      * @Method({"GET", "POST"})
+     *
      * @Template(template="@Car/car/edit.html.twig")
      *
      * @param Request $request
