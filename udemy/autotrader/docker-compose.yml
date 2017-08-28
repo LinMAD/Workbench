@@ -1,0 +1,46 @@
+version: "2"
+services:
+  web:
+    container_name: web-autotrader
+    image: nginx:latest
+    volumes:
+      - ./app/config/docker/nginx/sf3-nginx.conf:/etc/nginx/conf.d/default.conf
+      # Map public volume of app
+      - ./web/:/var/www/autotrader/web
+      # Set cache, logs, sessions
+      - ./var/cache:/var/www/autotrader/var/cache
+      - ./var/logs:/var/www/autotrader/var/logs
+      - ./var/sessions:/var/www/autotrader/var/sessions
+    ports:
+      # Expose host and container port
+      - "80:80"
+    depends_on:
+      - db
+      - phpfpm
+
+  phpfpm:
+    container_name: phpfpm-autotrader
+    # Build php with additional extensions
+    build: ./app/config/docker/php
+    volumes: #Map code base for php
+      - ./:/var/www/autotrader
+    environment:
+      - SYMFONY_ENV=dev
+      - SYMFONY_DEBUG=1
+    depends_on:
+      - db
+
+  db:
+    container_name: db-autotrader
+    image: percona:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=SecretRoot
+      - MYSQL_USER=sf3-system
+      - MYSQL_PASSWORD=SecurePass
+      - MYSQL_DATABASE=SF3_APP
+    volumes:
+      # Load prepared fresh database
+      - ./app/config/docker/mysql/:/docker-entrypoint-initdb.d
+    ports:
+      # Expose host and container port
+      - "3316:3316"
