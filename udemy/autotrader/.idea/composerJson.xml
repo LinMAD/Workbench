@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ComposerJsonPluginSettings">
     <unboundedVersionInspectionSettings>
-      <excludedPackages />
+      <excludedPackages>
+        <pattern pattern="knplabs/knp-menu-bundle" />
+      </excludedPackages>
     </unboundedVersionInspectionSettings>
     <customRepositories />
   </component>
