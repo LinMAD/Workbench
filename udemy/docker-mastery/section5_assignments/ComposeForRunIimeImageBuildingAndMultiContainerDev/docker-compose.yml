@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  drupal: # Drupal CMS with php and apache
+    build:
+      context: .
+      dockerfile: custom-drupal.Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - drupal-modules:/var/www/html/modules
+      - drupal-profiles:/var/www/html/profiles
+      - drupal-sites:/var/www/html/sites
+      - drupal-themes:/var/www/html/themes
+    networks:
+      drupal_app_net:
+        ipv4_address: 110.15.200.5
+
+  db: # Postgres database
+    image: postgres:latest
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=drupal_system
+      - POSTGRES_PASSWORD=SecurePass
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    networks:
+      drupal_app_net:
+        ipv4_address: 110.15.200.10
+
+# Set a application custom network with static IP
+networks:
+  drupal_app_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 110.15.200.0/24
+
+# Create docker volumes to store services data
+volumes:
+  drupal-modules:
+  drupal-profiles:
+  drupal-sites:
+  drupal-themes:
+  pgdata:
