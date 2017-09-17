@@ -152,7 +152,6 @@ case "$1" in
         if [[ $NODE_COUNT > 1  ]]; then
           dockerMachineDo 2 joinToSwarmCluster
         fi
-        wait
       ;;
   rm)   echo  "Remove all docker machine nodes"
         dockerMachineDo 1 removeNode
