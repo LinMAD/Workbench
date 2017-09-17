@@ -22,7 +22,7 @@ function createNode {
   docker-machine create $1
   if [ $? -ne 0 ]; then
       echo "Unable to create node: ($1) in docker machine"
-      exit 1;
+      exit 1
   fi
 }
 
@@ -31,7 +31,7 @@ function removeNode {
   docker-machine rm -f $1
   if [ $? -ne 0 ]; then
       echo "Unable to remove node: ($1) in docker machine"
-      exit 1;
+      exit 1
   fi
 }
 
@@ -40,7 +40,7 @@ function startNode {
   docker-machine start $1
   if [ $? -ne 0 ]; then
       echo "Unable to start node: $1"
-      exit 1;
+      exit 1
   fi
 }
 
@@ -49,7 +49,7 @@ function stopNode {
   docker-machine stop $1
   if [ $? -ne 0 ]; then
       echo "Unable to stop node: $1"
-      exit 1;
+      exit 1
   fi
 }
 
@@ -77,7 +77,7 @@ while getopts ':hs:' option; do
   case "$option" in
     h) echo $"$USAGE"
 
-       exit 0;
+       exit 0
        ;;
   esac
 done
@@ -87,13 +87,13 @@ shift $((OPTIND - 1))
 if [[ -z `which virtualbox` ]]; then
  echo "First install virtualbox"
 
- exit 1;
+ exit 1
 fi
 
 if [[ -z `which docker-machine` ]]; then
  echo "First install docker machine"
 
- exit 1;
+ exit 1
 fi
 
 #
@@ -102,7 +102,7 @@ fi
 case "$1" in
   init) echo "Creating docker machine nodes"
         dockerMachineDo createNode
-    ;;
+      ;;
   rm)   echo  "Remove all docker machine nodes"
         dockerMachineDo removeNode
       ;;
@@ -111,13 +111,13 @@ case "$1" in
       ;;
   stop) echo  "Stops all docker machine nodes"
         dockerMachineDo stopNode
-     ;;
+      ;;
   *)  echo "Unknown command, watch help"
       echo "---------------------------"
       echo $"$USAGE"
 
-      exit 1;
-     ;;
+      exit 1
+      ;;
 esac
 
-exit 0;
+exit 0
