@@ -1,0 +1,76 @@
+# Application stack of Vote app
+# Cats VS Dogs
+#
+version: "3"
+services:
+  #
+  # Services in frontend network
+  #
+  vote: # Vote web app for users
+    image: dockersamples/examplevotingapp_vote:before
+    depends_on:
+      - redis
+    deploy: # Deploy app to nodes
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "80:80"
+    networks:
+      - frontend
+  redis: # DB for vote app, storag
+    image: redis:3.2
+    deploy: # Deploy app to nodes
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    networks:
+      - frontend
+  #
+  # Services in backend network
+  #
+  result: # web app that shows results
+    image: dockersamples/examplevotingapp_result:before
+    depends_on:
+      - db
+    deploy: # Deploy app to nodes
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "5001:80"
+    networks:
+      - backend
+  db: # Main database where stored results of Vote app
+    image: postgres:9.4
+    volumes:
+      - DatabasePgdata:/var/lib/postgresql/data
+    deploy: # Deploy app to nodes
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - backend
+
+  #
+  # Global services: contained in networks: frontend and backend
+  #
+  worker: # backend processor of redis and storing results in postgres db
+    image: dockersamples/examplevotingapp_worker
+    depends_on:
+      - redis
+      - db
+    # Deploy app to nodes, with max replicas:2
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - frontend
+
+networks: # Networks configuration
+  frontend:
+  backend:
+
+volumes: # Create docker volumes to store services data
+  DatabasePgdata:
