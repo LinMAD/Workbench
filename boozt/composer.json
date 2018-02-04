@@ -9,7 +9,8 @@
   ],
   "autoload": {
     "psr-4": {
-      "Engine\\": ["Engine/"]
+      "Engine\\": ["Engine/"],
+      "App\\": ["src"]
     }
   },
   "require": {}
