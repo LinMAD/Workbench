@@ -12,13 +12,13 @@ use Engine\Modules\Router\RouterInterface;
 class Core
 {
     // TODO If service loader will be implemented, remove const names of services
-    public const SERV_DB = 'db';
+    private const SERV_DB = 'db';
     private const SERV_ROUTER = 'router';
 
     /**
      * @var ContainerInterface
      */
-    private $container;
+    private static $container;
 
     /**
      * Builds core of engine with given DI
@@ -32,13 +32,13 @@ class Core
         ?RouterInterface $router = null,
         ?ContainerInterface $container = null
     ) {
-        $this->container = $container ?: new EngineContainer();
+        self::$container = $container ?: new EngineContainer();
 
         // TODO Think about service loader if will have a time
         // TODO Add database manager to abstract model
         // TODO add percona
-        $this->container->setService(self::SERV_DB, new DatabaseManager($dbConfig));
-        $this->container->setService(self::SERV_ROUTER, $router ?: new Router());
+        self::$container->setService(self::SERV_DB, new DatabaseManager($dbConfig));
+        self::$container->setService(self::SERV_ROUTER, $router ?: new Router());
     }
 
     /**
@@ -46,9 +46,9 @@ class Core
      *
      * @return ContainerInterface
      */
-    public function getContainer(): ContainerInterface
+    protected function getContainer(): ContainerInterface
     {
-        return $this->container;
+        return self::$container;
     }
 
     /**
@@ -58,7 +58,7 @@ class Core
      */
     public function getRouter(): RouterInterface
     {
-        return $this->container->getService(self::SERV_ROUTER);
+        return self::$container->getService(self::SERV_ROUTER);
     }
 
     /**
@@ -68,7 +68,7 @@ class Core
      */
     public function getDatabaseManager(): DatabaseManager
     {
-        return $this->container->getService(self::SERV_DB);
+        return self::$container->getService(self::SERV_DB);
     }
 
     /**
@@ -77,8 +77,8 @@ class Core
      * @throws \Engine\Modules\Router\Exceptions\RoutesNotFoundException
      * @throws \Engine\Modules\Router\Exceptions\NotFoundException
      */
-    public function run(): void
+    public static function run(): void
     {
-        $this->container->getService(self::SERV_ROUTER)::execute($_SERVER['REQUEST_URI']);
+        self::$container->getService(self::SERV_ROUTER)::execute($_SERVER['REQUEST_URI']);
     }
 }

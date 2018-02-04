@@ -3,8 +3,6 @@
 use App\Config\DbConfig;
 use Engine\Core;
 
-// TODO Think about to wrap these to init file to keep index.php more cleaner
-
 /**
  * Handle fatal errors from PHP
  */
@@ -26,30 +24,21 @@ register_shutdown_function('handleFatal');
 $autoloader = require __DIR__ . '/vendor/autoload.php';
 
 try {
-    // Create db configuration
-    $config = new DbConfig(
-        'boozt-test-app-db', // container name
-        'test_app',
-        'root',
-        'my-secret-pw'
-    );
-
-    // Initialize engine core
-
+    $config = new DbConfig('boozt-test-app-db', 'test_app','root','my-secret-pw');
     $engine = new Core($config);
 
-    // TODO Add controller collection
-    $engine->getRouter()->addRoute('/', function () use ($engine) {
-       echo '<h1>Hello world</h1>';
-       /** @var Core $engine */
-       $statement = $engine->getDatabaseManager()->prepare('SHOW TABLES');
-       $statement->execute();
-       echo '<pre>';
-       var_dump($statement->fetchAll());
-    });
+    // Load all controllers
+    if ($handle = opendir(__DIR__ . '/src/Controller')) {
+        while (false !== ($entry = readdir($handle))) {
+            if ($entry !== '.' && $entry !== '..') {
+                require_once __DIR__ . "/src/Controller/$entry";
+            }
+        }
+        closedir($handle);
+    }
 
     // Execute application
-    $engine->run();
+    $engine::run();
 } catch(\Throwable $e) {
     echo '<pre>';
     echo '<h1>Exception: ' . $e->getMessage() . '</h1>';

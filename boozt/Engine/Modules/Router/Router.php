@@ -47,7 +47,8 @@ class Router implements RouterInterface
      * @throws \Engine\Modules\Router\Exceptions\NotFoundException
      * @throws \Engine\Modules\Router\Exceptions\RoutesNotFoundException
      */
-    public static function execute(string $url) {
+    public static function execute(string $url)
+    {
         if (\count(self::$routes) <= 0) {
             throw new RoutesNotFoundException('Routes collection are empty');
         }

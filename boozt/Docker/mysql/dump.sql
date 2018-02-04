@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS `test_app`.`Order` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `country` VARCHAR(2) NOT NULL COMMENT 'ISO \"ALPHA-2 Code',
   `device` VARCHAR(255) NOT NULL,
+  `purchase_date` DATETIME NOT NULL DEFAULT NOW(),
   `Customer_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_Order_Customer`
