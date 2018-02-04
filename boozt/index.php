@@ -3,6 +3,8 @@
 use App\Config\DbConfig;
 use Engine\Core;
 
+// TODO Think about to wrap these to init file to keep index.php more cleaner
+
 /**
  * Handle fatal errors from PHP
  */
@@ -24,19 +26,30 @@ register_shutdown_function('handleFatal');
 $autoloader = require __DIR__ . '/vendor/autoload.php';
 
 try {
-    // TODO add pdo ext to php in docker file and add percona
     // Create db configuration
-//    $config = new DbConfig(
-//        'localhost',
-//        'test_app',
-//        'system_test_app',
-//        'someSecurePass'
-//    );
+    $config = new DbConfig(
+        'boozt-test-app-db', // container name
+        'test_app',
+        'root',
+        'my-secret-pw'
+    );
 
-    $engine = new Core();
-    $container = $engine->getContainer();
+    // Initialize engine core
 
-    //$db = $container->getService(Core::SERV_DB);
+    $engine = new Core($config);
+
+    // TODO Add controller collection
+    $engine->getRouter()->addRoute('/', function () use ($engine) {
+       echo '<h1>Hello world</h1>';
+       /** @var Core $engine */
+       $statement = $engine->getDatabaseManager()->prepare('desc mysql.user');
+       $statement->execute();
+       echo '<pre>';
+       var_dump($statement->fetchAll());
+    });
+
+    // Execute application
+    $engine->run();
 } catch(\Throwable $e) {
     echo '<pre>';
     echo '<h1>Exception: ' . $e->getMessage() . '</h1>';
