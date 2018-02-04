@@ -10,4 +10,6 @@ $autoloader = require __DIR__ . '/vendor/autoload.php';
 
 $engine = new Core();
 
-var_dump($engine->test());
+$appContainer = $engine->test();
+$serviceFoo = $appContainer->getService('foo');
+var_dump($serviceFoo);
