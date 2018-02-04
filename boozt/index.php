@@ -42,7 +42,7 @@ try {
     $engine->getRouter()->addRoute('/', function () use ($engine) {
        echo '<h1>Hello world</h1>';
        /** @var Core $engine */
-       $statement = $engine->getDatabaseManager()->prepare('desc mysql.user');
+       $statement = $engine->getDatabaseManager()->prepare('SHOW TABLES');
        $statement->execute();
        echo '<pre>';
        var_dump($statement->fetchAll());

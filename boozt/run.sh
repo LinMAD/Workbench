@@ -7,14 +7,42 @@ then
     exit 1
 fi
 
-# Run app in docker container, name of container boozt-test-app
+# Check if composer crated PSR4 autoloader
+if [ ! -d `pwd`/vendor ]; then
+    docker run --rm \
+        --name composer \
+        --interactive \
+        --tty \
+        --net host \
+        --volume `pwd`:/app \
+        --workdir /app \
+        --user $(id -u):$(id -g) \
+    composer:latest "install"
+
+    if [ $? -ne 0 ]; then
+          echo "Composer install in docker failed"
+          exit 1
+    fi
+fi
+
+
+# Create docker network for app
+docker network create boozt-net
+if [ $? -ne 0 ]; then
+      docker network rm boozt-net
+      docker network create boozt-net
+      if [ $? -ne 0 ]; then
+          echo "Unable to create docker network(boozt-net) of test app"
+          exit 1
+      fi
+fi
+
+# Build php custom image
 docker build -f `pwd`/Docker/php/Dockerfile . -t boozt-php72:latest
 if [ $? -ne 0 ]; then
       echo "Failed to build docker image boozt-php72 -> pwd -> `pwd`/Docker/Dockerfile "
       exit 1
 fi
-
-docker network create boozt-net
 
 # Build MySQL percona container
 docker run --name boozt-test-app-db \
