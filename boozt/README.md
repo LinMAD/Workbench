@@ -1,4 +1,5 @@
-## The MVC test app
+## The MVC test app 
+It stays in that place where a marathon of the challenge was done. Not working rendering views and routes and maybe some think more (Not tests not truth).
 
 The app based on pure PHP and MVC pattern. 
 
