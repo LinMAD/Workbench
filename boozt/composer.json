@@ -1,0 +1,17 @@
+{
+  "name": "linmad/boozt",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Artjoms Nemiro",
+      "email": "nemtjom@hotmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Engine\\": ["Engine/"],
+      "App\\": ["src"]
+    }
+  },
+  "require": {}
+}
