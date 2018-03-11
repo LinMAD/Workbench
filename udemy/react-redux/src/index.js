@@ -14,6 +14,7 @@ const App = () => {
   );
 };
 
+// Render component's HTML and put it to page
 ReactDOM.render(
     <App/>,
     document.querySelector('.container')

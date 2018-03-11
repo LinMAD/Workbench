@@ -2,12 +2,22 @@ import React from "react";
 import {Component} from "react/lib/ReactIsomorphic";
 
 class SearchBar extends Component {
-    render() {
-        return <input onChange={SearchBar.onInputChange} />;
+    constructor(props) {
+        super(props);
+
+        this.state = { term: '' }
     }
 
-    static onInputChange(event) {
-        console.log(event.target.value)
+    render() {
+        return (
+            <div>
+                <input
+                    value={this.state.term}
+                    onChange={event => this.setState({ term: event.target.value})}
+                />
+                Value of input: { this.state.term }
+            </div>
+        );
     }
 }
 
