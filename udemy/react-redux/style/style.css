@@ -11,6 +11,10 @@
     max-width: 64px;
 }
 
+.video-title {
+    padding-left: 5px;
+}
+
 .video-detail .details {
     margin-top: 10px;
     padding: 10px;

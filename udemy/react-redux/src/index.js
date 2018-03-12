@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from "react";
 import ReactDOM from "react-dom";
 import {Component} from "react/lib/ReactIsomorphic";
@@ -32,10 +33,15 @@ class App extends Component {
     }
 
     render() {
+        const videoSearch = _.debounce(
+            (term) => { this.videoSearch(term)},
+            500
+        );
+
         return (
             <div>
                 <div className="row">
-                    <SearchBar onSearchTermChange={term => this.videoSearch(term)} />
+                    <SearchBar onSearchTermChange={videoSearch} />
                 </div>
                 <div className="row">
                     <VideoDetail video={this.state.selectedVideo} />
