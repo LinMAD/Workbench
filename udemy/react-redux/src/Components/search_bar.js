@@ -10,12 +10,12 @@ class SearchBar extends Component {
 
     render() {
         return (
-            <div>
+            <div className="col-md-12 search-bar">
+                Search video:&nbsp;
                 <input
                     value={this.state.term}
                     onChange={event => this.setState({ term: event.target.value})}
                 />
-                &nbsp;Value of input: { this.state.term }
             </div>
         );
     }
