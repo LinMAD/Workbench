@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Dice primitive game</string>
+    <string name="btn_title_roll">Roll</string>
+</resources>
