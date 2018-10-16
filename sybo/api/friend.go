@@ -48,7 +48,7 @@ func (api *API) friend(w http.ResponseWriter, r *http.Request) {
 		api.Storage.Add(string(uuid)+storageFriendPostfix, friendList)
 		api.successResponse(w, http.StatusAccepted, SuccessResponse{Message: "Accepted"})
 	case "GET":
-		friendList := api.Storage.Get(string(uuid+storageFriendPostfix))
+		friendList := api.Storage.Get(string(uuid + storageFriendPostfix))
 		if friendList == nil {
 			api.errorResponse(w, fmt.Errorf("%s", "Friend list not found"), http.StatusNotFound)
 
