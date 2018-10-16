@@ -1,7 +1,7 @@
 package storage
 
-// Storage methods
-type Storage interface {
+// IStorage methods
+type IStorage interface {
 	// Add to storage
 	Add(key string, data interface{})
 	// Get from storage

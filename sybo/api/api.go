@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"regexp"
+	"strings"
 )
 
 const apiTag = "API: "
@@ -16,15 +17,15 @@ type (
 	UUID string
 	// API general structure
 	API struct {
-		// Storage for data keeping
-		Storage storage.Storage
-		Router *RegexpHandler
+		// IStorage for data keeping
+		Storage storage.IStorage
+		Router  *RegexpHandler
 	}
-	// ErrorResponse default response
+	// errorResponse default response
 	ErrorResponse struct {
 		Message string `json:"error"`
 	}
-	// SuccessResponse default successful response
+	// successResponse default successful response
 	SuccessResponse struct {
 		Message string `json:"success"`
 	}
@@ -59,9 +60,8 @@ func (regHand *RegexpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 	http.NotFound(w, r)
 }
 
-
 // NewAPI with simple DI
-func NewAPI(storage storage.Storage) *API {
+func NewAPI(storage storage.IStorage) *API {
 	api := &API{
 		Storage: storage,
 		Router:  new(RegexpHandler),
@@ -76,10 +76,11 @@ func NewAPI(storage storage.Storage) *API {
 func (api *API) registerAllEndpoints() {
 	api.Router.HandleFunc("^/user$", api.user)
 	api.Router.HandleFunc(`^/user/(.*)/state$`, api.gameState)
+	api.Router.HandleFunc(`^/user/(.*)/friends`, api.friend)
 }
 
-// ErrorResponse
-func (api *API) ErrorResponse(w http.ResponseWriter, err error, statusCode ...int) {
+// errorResponse
+func (api *API) errorResponse(w http.ResponseWriter, err error, statusCode ...int) {
 	var code int
 
 	if len(statusCode) > 0 {
@@ -93,13 +94,13 @@ func (api *API) ErrorResponse(w http.ResponseWriter, err error, statusCode ...in
 	json.NewEncoder(w).Encode(errResponse)
 }
 
-// SuccessResponse
-func (api *API) SuccessResponse(w http.ResponseWriter, code int, payload interface{}) {
+// successResponse
+func (api *API) successResponse(w http.ResponseWriter, code int, payload interface{}) {
 	response, err := json.Marshal(payload)
 	if err != nil {
 		// TODO Use logger from dependencies
 		log.Printf("%s API success response dispatch error: %s", apiTag, err.Error())
-		api.ErrorResponse(w, fmt.Errorf("%s", "Unable to dispatch response"))
+		api.errorResponse(w, fmt.Errorf("%s", "Unable to dispatch response"))
 		return
 	}
 
@@ -110,5 +111,18 @@ func (api *API) SuccessResponse(w http.ResponseWriter, code int, payload interfa
 
 // InvalidHTTPMethod default error
 func (api *API) InvalidHTTPMethod(w http.ResponseWriter) {
-	api.ErrorResponse(w, fmt.Errorf("%s", "Invalid request method"), http.StatusMethodNotAllowed)
+	api.errorResponse(w, fmt.Errorf("%s", "Invalid request method"), http.StatusMethodNotAllowed)
+}
+
+// getUserUUIDFromPath extract uuid from request
+func (api *API) getUserUUIDFromPath(r *http.Request) (UUID, error) {
+	urlPart := strings.Split(r.URL.Path, "/")
+	if len(urlPart) != 4 { // -> /user/{id}/state
+		err := fmt.Errorf("%s", "Unexpected err")
+		log.Printf("%s Url parsing error: %s", tagGameState, "Expected 3 part of url, returned less")
+
+		return "", err
+	}
+
+	return UUID(urlPart[2]), nil
 }

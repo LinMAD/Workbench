@@ -32,7 +32,7 @@ func (api *API) user(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		var newUser User
 		if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
-			api.ErrorResponse(w, fmt.Errorf("%s", "Invalid request payload"), http.StatusBadRequest)
+			api.errorResponse(w, fmt.Errorf("%s", "Invalid request payload"), http.StatusBadRequest)
 
 			return
 		}
@@ -56,7 +56,7 @@ func (api *API) user(w http.ResponseWriter, r *http.Request) {
 		userCollection = append(userCollection.([]User), newUser)
 		api.Storage.Add(usersKey, userCollection)
 
-		api.SuccessResponse(w, http.StatusCreated, newUser)
+		api.successResponse(w, http.StatusCreated, newUser)
 	case "GET":
 		var uCollection UserCollection
 
@@ -65,7 +65,7 @@ func (api *API) user(w http.ResponseWriter, r *http.Request) {
 			uCollection.List = uList.([]User)
 		}
 
-		api.SuccessResponse(w, http.StatusOK, uCollection)
+		api.successResponse(w, http.StatusOK, uCollection)
 	default:
 		api.InvalidHTTPMethod(w)
 	}
