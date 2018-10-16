@@ -9,7 +9,7 @@ import (
 	"regexp"
 )
 
-const apiTag = "API"
+const apiTag = "API: "
 
 type (
 	// UUID represents type for unique id
@@ -20,9 +20,13 @@ type (
 		Storage storage.Storage
 		Router *RegexpHandler
 	}
-	// ErrorResponse default error response
+	// ErrorResponse default response
 	ErrorResponse struct {
 		Message string `json:"error"`
+	}
+	// SuccessResponse default successful response
+	SuccessResponse struct {
+		Message string `json:"success"`
 	}
 )
 
@@ -94,7 +98,7 @@ func (api *API) SuccessResponse(w http.ResponseWriter, code int, payload interfa
 	response, err := json.Marshal(payload)
 	if err != nil {
 		// TODO Use logger from dependencies
-		log.Printf("%s%s", apiTag, err.Error())
+		log.Printf("%s API success response dispatch error: %s", apiTag, err.Error())
 		api.ErrorResponse(w, fmt.Errorf("%s", "Unable to dispatch response"))
 		return
 	}

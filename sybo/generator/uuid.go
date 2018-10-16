@@ -1,6 +1,9 @@
 package generator
 
-import "os/exec"
+import (
+	"os/exec"
+	"strings"
+)
 
 // GenerateUUID
 func GenerateUUID() (string, error) {
@@ -9,5 +12,7 @@ func GenerateUUID() (string, error) {
 		return "", err
 	}
 
-	return string(newId), nil
+	cleanId := strings.TrimSuffix(string(newId), "\n")
+
+	return string(cleanId), nil
 }

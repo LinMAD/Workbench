@@ -33,29 +33,26 @@ func (api *API) user(w http.ResponseWriter, r *http.Request) {
 		var newUser User
 		if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
 			api.ErrorResponse(w, fmt.Errorf("%s", "Invalid request payload"), http.StatusBadRequest)
+
 			return
 		}
 
 		newUUID, err := generator.GenerateUUID()
 		if err != nil {
 			fmt.Fprint(w, err.Error())
+
 			return
 		}
 		// Try save new user
 		newUser.ID = UUID(newUUID)
 		api.Storage.Add(newUUID, newUser)
 
-		// Check if stored
-		if ok := api.Storage.Get(newUUID); ok == nil {
-			api.ErrorResponse(w, fmt.Errorf("%s", "Unable to create user"), http.StatusServiceUnavailable)
-			return
-		}
-
 		// TODO Refactor that, look to usersKey todo
 		userCollection := api.Storage.Get(usersKey)
 		if userCollection == nil {
 			userCollection = make([]User, 0)
 		}
+
 		userCollection = append(userCollection.([]User), newUser)
 		api.Storage.Add(usersKey, userCollection)
 
