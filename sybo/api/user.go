@@ -70,6 +70,6 @@ func (api *API) user(w http.ResponseWriter, r *http.Request) {
 
 		api.SuccessResponse(w, http.StatusOK, uCollection)
 	default:
-		api.ErrorResponse(w, fmt.Errorf("%s", "Invalid request method"), http.StatusMethodNotAllowed)
+		api.InvalidHTTPMethod(w)
 	}
 }

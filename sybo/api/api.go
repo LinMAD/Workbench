@@ -6,6 +6,7 @@ import (
 	"github.com/LinMAD/workshops/sybo/storage"
 	"log"
 	"net/http"
+	"regexp"
 )
 
 const apiTag = "API"
@@ -15,7 +16,9 @@ type (
 	UUID string
 	// API general structure
 	API struct {
+		// Storage for data keeping
 		Storage storage.Storage
+		Router *RegexpHandler
 	}
 	// ErrorResponse default error response
 	ErrorResponse struct {
@@ -23,16 +26,52 @@ type (
 	}
 )
 
-// NewAPI with simple DI
-func NewAPI(storage storage.Storage) *API {
-	return &API{
-		Storage: storage,
-	}
+type route struct {
+	pattern *regexp.Regexp
+	handler http.Handler
 }
 
-// ServeAllEndpoints handle all registered API endpoints
-func (api *API) ServeAllEndpoints() {
-	http.HandleFunc("/user", api.user)
+// RegexpHandler with routes
+type RegexpHandler struct {
+	routes []*route
+}
+
+// HandleFunc custom handler with url pattern support
+func (regHand *RegexpHandler) HandleFunc(pattern string, handler func(http.ResponseWriter, *http.Request)) {
+	re := regexp.MustCompile(pattern)
+
+	regHand.routes = append(regHand.routes, &route{re, http.HandlerFunc(handler)})
+}
+
+// Serve all HTTP routes
+func (regHand *RegexpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	for _, route := range regHand.routes {
+		if route.pattern.MatchString(r.URL.Path) {
+			route.handler.ServeHTTP(w, r)
+			return
+		}
+	}
+
+	http.NotFound(w, r)
+}
+
+
+// NewAPI with simple DI
+func NewAPI(storage storage.Storage) *API {
+	api := &API{
+		Storage: storage,
+		Router:  new(RegexpHandler),
+	}
+
+	api.registerAllEndpoints()
+
+	return api
+}
+
+// registerAllEndpoints handle all registered API endpoints
+func (api *API) registerAllEndpoints() {
+	api.Router.HandleFunc("^/user$", api.user)
+	api.Router.HandleFunc(`^/user/(.*)/state$`, api.gameState)
 }
 
 // ErrorResponse
@@ -63,4 +102,9 @@ func (api *API) SuccessResponse(w http.ResponseWriter, code int, payload interfa
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
 	w.Write(response)
+}
+
+// InvalidHTTPMethod default error
+func (api *API) InvalidHTTPMethod(w http.ResponseWriter) {
+	api.ErrorResponse(w, fmt.Errorf("%s", "Invalid request method"), http.StatusMethodNotAllowed)
 }

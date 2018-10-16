@@ -18,10 +18,9 @@ func init() {
 func main() {
 	// Create API and provide storage for data saving
 	restApi := api.NewAPI(storage.Boot())
-	restApi.ServeAllEndpoints()
 
 	// Listen HTTP Requests and handle requests
-	if serverErr := http.ListenAndServe(":"+apiPort, nil); serverErr != nil {
+	if serverErr := http.ListenAndServe(":"+apiPort, restApi.Router); serverErr != nil {
 		log.Fatal(serverErr.Error())
 	}
 }
