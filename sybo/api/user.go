@@ -37,6 +37,18 @@ func (api *API) user(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		// Check if same user exist by name
+		uList := api.Storage.Get(usersKey)
+		if uList != nil {
+			for _, user := range uList.([]User) {
+				if user.Name == newUser.Name {
+					api.errorResponse(w, fmt.Errorf("%s - already exist", newUser.Name), http.StatusBadRequest)
+
+					return
+				}
+			}
+		}
+
 		newUUID, err := generator.GenerateUUID()
 		if err != nil {
 			fmt.Fprint(w, err.Error())
@@ -67,6 +79,6 @@ func (api *API) user(w http.ResponseWriter, r *http.Request) {
 
 		api.successResponse(w, http.StatusOK, uCollection)
 	default:
-		api.InvalidHTTPMethod(w)
+		api.invalidHTTPMethod(w)
 	}
 }

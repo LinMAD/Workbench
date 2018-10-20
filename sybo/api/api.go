@@ -76,7 +76,7 @@ func NewAPI(storage storage.IStorage) *API {
 func (api *API) registerAllEndpoints() {
 	api.Router.HandleFunc("^/user$", api.user)
 	api.Router.HandleFunc(`^/user/(.*)/state$`, api.gameState)
-	api.Router.HandleFunc(`^/user/(.*)/friends`, api.friend)
+	api.Router.HandleFunc(`^/user/(.*)/friends$`, api.friend)
 }
 
 // errorResponse
@@ -89,6 +89,7 @@ func (api *API) errorResponse(w http.ResponseWriter, err error, statusCode ...in
 		code = http.StatusInternalServerError
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
 	errResponse := ErrorResponse{Message: err.Error()}
 	json.NewEncoder(w).Encode(errResponse)
@@ -101,6 +102,7 @@ func (api *API) successResponse(w http.ResponseWriter, code int, payload interfa
 		// TODO Use logger from dependencies
 		log.Printf("%s API success response dispatch error: %s", apiTag, err.Error())
 		api.errorResponse(w, fmt.Errorf("%s", "Unable to dispatch response"))
+
 		return
 	}
 
@@ -109,8 +111,8 @@ func (api *API) successResponse(w http.ResponseWriter, code int, payload interfa
 	w.Write(response)
 }
 
-// InvalidHTTPMethod default error
-func (api *API) InvalidHTTPMethod(w http.ResponseWriter) {
+// invalidHTTPMethod default error
+func (api *API) invalidHTTPMethod(w http.ResponseWriter) {
 	api.errorResponse(w, fmt.Errorf("%s", "Invalid request method"), http.StatusMethodNotAllowed)
 }
 
@@ -125,4 +127,26 @@ func (api *API) getUserUUIDFromPath(r *http.Request) (UUID, error) {
 	}
 
 	return UUID(urlPart[2]), nil
+}
+
+// checkIfUserExist
+func (api *API) checkIfUserExist(w http.ResponseWriter, r *http.Request) *UUID {
+	var requesterUUID UUID
+	var uuidErr error
+
+	requesterUUID, uuidErr = api.getUserUUIDFromPath(r)
+	if uuidErr != nil {
+		api.errorResponse(w, uuidErr, http.StatusServiceUnavailable)
+
+		return nil
+	}
+
+	isUser := api.Storage.Get(string(requesterUUID))
+	if isUser == nil {
+		api.errorResponse(w, fmt.Errorf("%s", "User not found"), http.StatusNotFound)
+
+		return nil
+	}
+
+	return &requesterUUID
 }

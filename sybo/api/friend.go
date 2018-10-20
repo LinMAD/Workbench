@@ -10,30 +10,20 @@ const storageFriendPostfix = "friend"
 
 // FriendList
 type FriendList struct {
-	// Friends list of friends
-	Friends []User `json:"friends"`
+	// Friends list with user UUID
+	Friends []UUID `json:"friends"`
 }
 
 // friend list endpoint handler
 func (api *API) friend(w http.ResponseWriter, r *http.Request) {
-	// TODO Move that to method\function
-	var uuid UUID
-	var uuidErr error
-
+	var requesterUUID UUID
 	if r.Method == "PUT" || r.Method == "GET" {
-		uuid, uuidErr = api.getUserUUIDFromPath(r)
-		if uuidErr != nil {
-			api.errorResponse(w, uuidErr, http.StatusServiceUnavailable)
-
+		isExistUUID := api.checkIfUserExist(w, r)
+		if isExistUUID == nil {
 			return
 		}
 
-		isUser := api.Storage.Get(string(uuid))
-		if isUser == nil {
-			api.errorResponse(w, fmt.Errorf("%s", "User not found"), http.StatusNotFound)
-
-			return
-		}
+		requesterUUID = *isExistUUID
 	}
 
 	switch r.Method {
@@ -45,10 +35,10 @@ func (api *API) friend(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		api.Storage.Add(string(uuid)+storageFriendPostfix, friendList)
+		api.Storage.Add(string(requesterUUID)+storageFriendPostfix, friendList)
 		api.successResponse(w, http.StatusAccepted, SuccessResponse{Message: "Accepted"})
 	case "GET":
-		friendList := api.Storage.Get(string(uuid + storageFriendPostfix))
+		friendList := api.Storage.Get(string(requesterUUID + storageFriendPostfix))
 		if friendList == nil {
 			api.errorResponse(w, fmt.Errorf("%s", "Friend list not found"), http.StatusNotFound)
 
@@ -57,6 +47,6 @@ func (api *API) friend(w http.ResponseWriter, r *http.Request) {
 
 		api.successResponse(w, http.StatusOK, friendList)
 	default:
-		api.InvalidHTTPMethod(w)
+		api.invalidHTTPMethod(w)
 	}
 }

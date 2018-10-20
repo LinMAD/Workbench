@@ -21,24 +21,14 @@ type GameState struct {
 
 // gameState endpoint
 func (api *API) gameState(w http.ResponseWriter, r *http.Request) {
-	// TODO Move that to method
-	var uuid UUID
-	var uuidErr error
-
+	var requesterUUID UUID
 	if r.Method == "PUT" || r.Method == "GET" {
-		uuid, uuidErr = api.getUserUUIDFromPath(r)
-		if uuidErr != nil {
-			api.errorResponse(w, uuidErr, http.StatusServiceUnavailable)
-
+		isExistUUID := api.checkIfUserExist(w, r)
+		if isExistUUID == nil {
 			return
 		}
 
-		isUser := api.Storage.Get(string(uuid))
-		if isUser == nil {
-			api.errorResponse(w, fmt.Errorf("%s", "User not found"), http.StatusNotFound)
-
-			return
-		}
+		requesterUUID = *isExistUUID
 	}
 
 	switch r.Method {
@@ -50,10 +40,10 @@ func (api *API) gameState(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		api.Storage.Add(string(uuid)+storageStatePostfix, gameState)
+		api.Storage.Add(string(requesterUUID)+storageStatePostfix, gameState)
 		api.successResponse(w, http.StatusAccepted, SuccessResponse{Message: "Accept"})
 	case "GET":
-		gameState := api.Storage.Get(string(uuid) + storageStatePostfix)
+		gameState := api.Storage.Get(string(requesterUUID) + storageStatePostfix)
 		if gameState == nil {
 			api.errorResponse(w, fmt.Errorf("%s", "Game state not found"), http.StatusNotFound)
 
@@ -62,6 +52,6 @@ func (api *API) gameState(w http.ResponseWriter, r *http.Request) {
 
 		api.successResponse(w, http.StatusOK, gameState)
 	default:
-		api.InvalidHTTPMethod(w)
+		api.invalidHTTPMethod(w)
 	}
 }
