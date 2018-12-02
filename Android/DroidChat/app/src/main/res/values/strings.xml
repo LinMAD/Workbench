@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DroidChat</string>
+
+    <!-- registration -->
+    <string name="bg_description_register">`@string/app_name` registration image</string>
+    <!-- login -->
+</resources>
