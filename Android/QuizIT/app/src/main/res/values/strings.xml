@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Quiz IT</string>
+
+    <string name="true_button">True</string>
+    <string name="false_button">False</string>
+    <string name="initial_score">Score 0/10</string>
+
+
+    <string name="incorrect_toast">Nope!</string>
+    <string name="correct_toast">You got it!</string>
+
+    <string name="question_placeholder"> </string>
+
+    <string name="question_stub_1">Google was originally called \"Backrub\".</string>
+    <string name="question_stub_2">The loudest sound produced by any animal is 188 decibels. That animal is the African Elephant.</string>
+
+</resources>

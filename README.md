@@ -1,5 +1,15 @@
-### Workshops
-A practical and experiments storage of projects :thinking:
-So, basically it's a collection of my learning activity with practical results. Why it's here? Simply, to track my learning road map and progress.
+### Workbench
 
-*P.S. These repository didn't represents an awesome project or a contains some rights to some project. Maybe someone can be inspired, to take same courses or practical assignments to make hem self better. :muscle:*
+![workspace](workbranch.jpg)
+
+The repository ~~is a collection~~ junk storage of different tinkered projects.
+Like: small demos, mini-applications or even implemented challenge tasks. :thinking:
+
+- **Why it's here?**
+
+Because the project doesn't deserve own repository. 
+It's mostly for me to keep tracks of my learning and progress.
+
+But maybe someone can be inspired, take the same courses or practical assignments to make self better. :muscle:*
+
+Anyway `Happy coding` and `never stop learning`!
